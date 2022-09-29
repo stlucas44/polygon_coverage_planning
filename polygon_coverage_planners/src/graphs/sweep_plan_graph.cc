@@ -31,6 +31,7 @@
 #include <polygon_coverage_geometry/visibility_polygon.h>
 
 #include <polygon_coverage_solvers/gk_ma.h>
+#include <or_tools_catkin/or_interface.h>
 
 #include <CGAL/Boolean_set_operations_2.h>
 #include <CGAL/create_offset_polygons_from_polygon_with_holes_2.h>
@@ -529,17 +530,22 @@ bool SweepPlanGraph::solve(const Point_2& start, const Point_2& goal,
     ROS_ERROR("Cannot get clusters.");
     return false;
   }
-  gk_ma::Task task(m, clusters);
-  gk_ma::GkMa& solver = gk_ma::GkMa::getInstance();
-  solver.setSolver(task);
+  //gk_ma::Task task(m, clusters);
+  //gk_ma::GkMa& solver = gk_ma::GkMa::getInstance();
+  //solver.setSolver(task);
+
+  or_tools_catkin::OrInterface solver(m.size());
+  solver.loadGTSP(m, clusters);
 
   ROS_INFO("Start solving GTSP");
   if (!solver.solve()) {
-    ROS_ERROR("GkMa solution failed.");
+    ROS_ERROR("Solver failed.");
     return false;
   }
   ROS_INFO("Finished solving GTSP");
-  std::vector<int> solution_int = solver.getSolution();
+  //std::vector<int> solution_int = solver.getSolution();
+  std::vector<int> solution_int = solver.getGTSPSolution();
+
   Solution solution(solution_int.size());
   std::copy(solution_int.begin(), solution_int.end(), solution.begin());
 

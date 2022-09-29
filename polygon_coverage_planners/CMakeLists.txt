@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(polygon_coverage_planners)
 
-find_package(catkin REQUIRED COMPONENTS rosconsole roslib polygon_coverage_solvers polygon_coverage_geometry)
+find_package(catkin REQUIRED COMPONENTS rosconsole roslib polygon_coverage_solvers polygon_coverage_geometry or_tools_catkin)
 
 find_package(CGAL QUIET COMPONENTS Core)
 include(${CGAL_USE_FILE})
@@ -57,4 +57,3 @@ install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
         FILES_MATCHING PATTERN "*.h"
         )
-
